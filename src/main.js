@@ -3,9 +3,15 @@ import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
 import './style.css';
 
-import HomePage from './pages/HomePage.vue';
+import { store } from './store';
 
-const routes = [{ path: '/', component: HomePage }];
+import HomePage from './pages/HomePage.vue';
+import BookAddPage from './pages/BookAddPage.vue';
+
+const routes = [
+  { path: '/', component: HomePage },
+  { path: '/book/add', component: BookAddPage },
+];
 
 const router = createRouter({
   routes,
@@ -14,4 +20,5 @@ const router = createRouter({
 
 const app = createApp(App);
 app.use(router);
+app.use(store);
 app.mount('#app');

@@ -7,10 +7,12 @@ import { store } from './store';
 
 import HomePage from './pages/HomePage.vue';
 import BookAddPage from './pages/BookAddPage.vue';
+import BookPage from './pages/BookPage.vue';
 
 const routes = [
   { path: '/', component: HomePage },
   { path: '/book/add', component: BookAddPage },
+  { path: '/book/:id', component: BookPage },
 ];
 
 const router = createRouter({

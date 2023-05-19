@@ -25,15 +25,20 @@ export default {
       type: Number,
       required: true,
     },
-    read: {
-      type: Number,
-      default: 0,
+    calendar: {
+      type: Array,
+      required: true,
     },
   },
   emits: {
     click: null,
   },
-  computed: {},
+  computed: {
+    read() {
+      if (!this.calendar.length) return 0;
+      return this.calendar.reduce((acc, [, pages]) => (acc += pages), 0);
+    },
+  },
   methods: {
     dateFormat(unix) {
       const months = [

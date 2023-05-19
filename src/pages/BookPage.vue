@@ -1,4 +1,6 @@
 <script>
+import formatDate from '../utils/formatDate.js';
+
 export default {
   name: 'BookPage',
   data() {
@@ -28,32 +30,9 @@ export default {
     },
   },
   methods: {
+    formatDate,
     handleBack() {
       this.$router.push('/');
-    },
-    dateFormat(unix) {
-      const months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-      const date = new Date(unix);
-      const day = date.getDate();
-      const month = months[date.getMonth()];
-      const hour =
-        date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
-      const minutes =
-        date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-      return `${day} ${month}, ${hour}:${minutes}`;
     },
     handleAddMark() {
       if (!this.pagesCount) return;
@@ -119,11 +98,11 @@ export default {
           </div>
           <div class="flex flex-col">
             <span class="uppercase text-xs leading-none">Addition date</span>
-            <p class="text-lg">{{ dateFormat(book.created) }}</p>
+            <p class="text-lg">{{ formatDate(book.created) }}</p>
           </div>
           <div class="flex flex-col">
             <span class="uppercase text-xs leading-none">Last update</span>
-            <p class="text-lg">{{ dateFormat(book.updated) }}</p>
+            <p class="text-lg">{{ formatDate(book.updated) }}</p>
           </div>
           <div class="flex flex-col">
             <span class="uppercase text-xs leading-none">Progress</span>

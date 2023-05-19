@@ -1,6 +1,8 @@
 <script>
 import AppProgressBar from './AppProgressBar.vue';
 
+import formatDate from '../utils/formatDate';
+
 export default {
   name: 'AppBook',
   components: { AppProgressBar },
@@ -40,28 +42,7 @@ export default {
     },
   },
   methods: {
-    dateFormat(unix) {
-      const months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-      const date = new Date(unix);
-      const day = date.getDate();
-      const month = months[date.getMonth()];
-      const hour = date.getHours();
-      const minutes = date.getMinutes();
-      return `${day} ${month}, ${hour}:${minutes}`;
-    },
+    formatDate,
   },
 };
 </script>
@@ -87,11 +68,11 @@ export default {
     <div class="flex gap-4">
       <div class="flex flex-col flex-1">
         <span class="uppercase text-xs leading-none">Created date</span>
-        <p class="text-lg">{{ dateFormat(created) }}</p>
+        <p class="text-lg">{{ formatDate(created) }}</p>
       </div>
       <div class="flex flex-col flex-1">
         <span class="uppercase text-xs leading-none">Last update</span>
-        <p class="text-lg">{{ dateFormat(updated) }}</p>
+        <p class="text-lg">{{ formatDate(updated) }}</p>
       </div>
     </div>
     <div class="flex flex-col">

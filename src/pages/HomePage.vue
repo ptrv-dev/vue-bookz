@@ -31,6 +31,7 @@ export default {
         :pagesCount="Number(book.pages)"
         :created="book.created"
         :updated="book.updated"
+        :calendar="book.calendar"
       />
     </div>
   </div>

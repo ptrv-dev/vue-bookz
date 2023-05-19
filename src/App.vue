@@ -13,12 +13,15 @@ export default {
     if (LS) this.$store.state.books = JSON.parse(LS);
   },
   watch: {
-    books() {
-      const LS = window.localStorage.getItem('books');
-      const json = JSON.stringify(this.books);
-      if (!LS || json !== LS) {
-        window.localStorage.setItem('books', json);
-      }
+    books: {
+      handler() {
+        const LS = window.localStorage.getItem('books');
+        const json = JSON.stringify(this.books);
+        if (!LS || json !== LS) {
+          window.localStorage.setItem('books', json);
+        }
+      },
+      deep: true,
     },
   },
 };

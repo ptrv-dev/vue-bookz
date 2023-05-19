@@ -16,12 +16,28 @@ export const store = createStore({
         pages: payload.pages,
         created: Date.now(),
         updated: Date.now(),
-        read: 0,
+        calendar: [],
       };
-      ctx.state.books = [...ctx.state.books, book];
+      ctx.state.books.push(book);
     },
-    removeBook(ctx, { id }) {
-      ctx.state.books = ctx.state.books.filter((book) => book._id !== id);
+    removeBook(ctx, { _id }) {
+      const book = ctx.state.books.find((b) => b._id === _id);
+      if (!book) throw new Error("Specified id doesn't found!");
+
+      ctx.state.books = ctx.state.books.filter((b) => b !== book);
+    },
+    addMark(ctx, { _id, pages }) {
+      const book = ctx.state.books.find((b) => b._id === _id);
+      if (!book) throw new Error("Specified id doesn't found!");
+      book.updated = Date.now();
+
+      const key = new Date().toLocaleDateString('ru-RU');
+      const mark = book.calendar.find((t) => t[0] === key);
+      if (mark) {
+        mark[1] += pages;
+      } else {
+        book.calendar.push([key, pages]);
+      }
     },
   },
 });

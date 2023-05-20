@@ -46,11 +46,12 @@ export const store = createStore({
         book.calendar.push([key, pages]);
       }
     },
-    addNotification(ctx, { title, text }) {
+    addNotification(ctx, { title, text, type = 'info' }) {
       ctx.state.notifications.push({
         added: Date.now(),
         title,
         text,
+        type,
       });
     },
     clearNotifications(ctx) {

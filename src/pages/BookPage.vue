@@ -40,7 +40,10 @@ export default {
         _id: this.book._id,
         pages: Number(this.pagesCount),
       });
-      alert('Added!'); //TODO: change alert
+      this.$store.dispatch('addNotification', {
+        title: 'Success',
+        text: 'Mark was added',
+      });
       this.pagesCount = '';
     },
   },

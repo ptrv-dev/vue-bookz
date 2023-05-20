@@ -15,14 +15,27 @@ export default {
     },
     handleSubmit() {
       if (!this.title || this.title.length < 3)
-        return alert('Incorrect book title!');
-      if (!this.pages) return alert('Incorrect pages count!');
+        return this.$store.dispatch('addNotification', {
+          title: 'Error!',
+          text: 'Incorrect book title',
+        });
+
+      if (!this.pages)
+        return this.$store.dispatch('addNotification', {
+          title: 'Error!',
+          text: 'Incorrect pages count',
+        });
       this.$store.dispatch('addBook', {
         title: this.title,
         author: this.author,
         pages: this.pages,
       });
       this.title = this.pages = this.author = '';
+      this.$store.dispatch('addNotification', {
+        title: 'Success',
+        text: 'Book was added to your list',
+      });
+      this.$router.push('/');
     },
   },
   watch: {

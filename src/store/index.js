@@ -51,7 +51,6 @@ export const store = createStore({
       ctx.state.notifications = [];
     },
     checkNotifications(ctx) {
-      console.log('herte');
       ctx.state.notifications = ctx.state.notifications.filter(
         (n) => n.added + 5000 > Date.now()
       );

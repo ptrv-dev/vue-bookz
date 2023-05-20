@@ -1,15 +1,14 @@
 <script>
+import AppEditable from '../components/AppEditable.vue';
 import formatDate from '../utils/formatDate.js';
 
 export default {
   name: 'BookPage',
+  components: { AppEditable },
   data() {
     return {
       pagesCount: '',
-      editable: {
-        target: null,
-        value: null,
-      },
+      editable: null,
     };
   },
   computed: {
@@ -64,19 +63,20 @@ export default {
       });
       this.$router.push('/');
     },
-    handleEdit(target, startValue) {
-      this.editable.target = target;
-      this.editable.value = startValue;
-    },
-    handleEditSave() {
-      console.log(this.editable);
-      if (this.editable.target === 'title') {
+    handleEditSave(newValue) {
+      if (this.editable === 'title') {
         this.$store.dispatch('editBook', {
           _id: this.paramId,
-          title: this.editable.value,
+          title: newValue,
+        });
+      } else if (this.editable === 'author') {
+        this.$store.dispatch('editBook', {
+          _id: this.paramId,
+          author: newValue,
         });
       }
-      this.editable.target = this.editable.value = null;
+
+      this.editable = null;
       this.$store.dispatch('addNotification', {
         title: 'Saved',
       });
@@ -160,51 +160,18 @@ export default {
             </svg>
           </span>
           <p
-            v-if="editable.target !== 'title'"
-            @click="handleEdit('title', book.title)"
+            v-if="editable !== 'title'"
+            @click="editable = 'title'"
             class="text-lg cursor-cell"
           >
             {{ book.title }}
           </p>
-          <div v-else class="flex items-center gap-1">
-            <input
-              type="text"
-              v-model="editable.value"
-              class="text-lg flex-1 bg-transparent border-b-dark border-b outline-none"
-            />
-            <button
-              @click="handleEditSave"
-              class="text-dark rounded-full p-1 transition-colors hover:bg-green-500 hover:text-white"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="w-4 h-4"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-            <button
-              @click="handleEditCancel"
-              class="text-dark rounded-full p-1 transition-colors hover:bg-red-500 hover:text-white"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="w-4 h-4"
-              >
-                <path
-                  d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
-                />
-              </svg>
-            </button>
-          </div>
+          <app-editable
+            v-else
+            :initial-value="book.title"
+            @save="handleEditSave"
+            @cancel="editable = null"
+          />
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
           <div class="inline-flex items-start flex-col">
@@ -223,7 +190,19 @@ export default {
                   d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
                 /></svg
             ></span>
-            <p class="text-lg">{{ book.author }}</p>
+            <p
+              v-if="editable !== 'author'"
+              @click="editable = 'author'"
+              class="text-lg cursor-cell"
+            >
+              {{ book.author }}
+            </p>
+            <app-editable
+              v-else
+              :initial-value="book.author"
+              @save="handleEditSave"
+              @cancel="editable = null"
+            />
           </div>
           <div class="inline-flex items-start flex-col">
             <span
@@ -241,7 +220,19 @@ export default {
                   d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
                 /></svg
             ></span>
-            <p class="text-lg">-</p>
+            <p
+              v-if="editable !== 'publication'"
+              @click="editable = 'publication'"
+              class="text-lg cursor-cell"
+            >
+              -
+            </p>
+            <app-editable
+              v-else
+              initial-value="-"
+              @save="handleEditSave"
+              @cancel="editable = null"
+            />
           </div>
           <div class="inline-flex items-start flex-col">
             <span
@@ -259,7 +250,19 @@ export default {
                   d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
                 /></svg
             ></span>
-            <p class="text-lg">{{ book.pages }}</p>
+            <p
+              v-if="editable !== 'pages'"
+              @click="editable = 'pages'"
+              class="text-lg cursor-cell"
+            >
+              {{ book.pages }}
+            </p>
+            <app-editable
+              v-else
+              :initial-value="book.pages"
+              @save="handleEditSave"
+              @cancel="editable = null"
+            />
           </div>
           <div class="inline-flex items-start flex-col">
             <span class="uppercase text-xs leading-none">Addition date</span>

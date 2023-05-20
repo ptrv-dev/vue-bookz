@@ -23,11 +23,11 @@ export default {
 </script>
 
 <template>
-  <div class="flex items-center gap-1">
+  <div class="flex items-center gap-1 w-full">
     <input
       type="text"
       v-model="value"
-      class="text-lg flex-1 bg-transparent border-b-dark border-b outline-none"
+      class="text-lg flex-1 bg-transparent border-b-dark border-b outline-none min-w-0"
     />
     <button
       @click="$emit('save', value)"

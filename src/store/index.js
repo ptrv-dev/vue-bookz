@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 export const store = createStore({
   state: {
     books: [],
+    notifications: [],
   },
   actions: {
     clearBooks(ctx) {
@@ -38,6 +39,22 @@ export const store = createStore({
       } else {
         book.calendar.push([key, pages]);
       }
+    },
+    addNotification(ctx, { title, text }) {
+      ctx.state.notifications.push({
+        added: Date.now(),
+        title,
+        text,
+      });
+    },
+    clearNotifications(ctx) {
+      ctx.state.notifications = [];
+    },
+    checkNotifications(ctx) {
+      console.log('herte');
+      ctx.state.notifications = ctx.state.notifications.filter(
+        (n) => n.added + 5000 > Date.now()
+      );
     },
   },
 });

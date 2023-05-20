@@ -21,6 +21,12 @@ export const store = createStore({
       };
       ctx.state.books.push(book);
     },
+    editBook(ctx, payload) {
+      const idx = ctx.state.books.findIndex((b) => b._id === payload._id);
+      if (idx === -1) throw new Error("Specified id doesn't found!");
+
+      ctx.state.books[idx] = { ...ctx.state.books[idx], ...payload };
+    },
     removeBook(ctx, { _id }) {
       const book = ctx.state.books.find((b) => b._id === _id);
       if (!book) throw new Error("Specified id doesn't found!");

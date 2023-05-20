@@ -6,6 +6,10 @@ export default {
   data() {
     return {
       pagesCount: '',
+      editable: {
+        target: null,
+        value: null,
+      },
     };
   },
   computed: {
@@ -59,6 +63,26 @@ export default {
         text: 'Book was successfully deleted',
       });
       this.$router.push('/');
+    },
+    handleEdit(target, startValue) {
+      this.editable.target = target;
+      this.editable.value = startValue;
+    },
+    handleEditSave() {
+      console.log(this.editable);
+      if (this.editable.target === 'title') {
+        this.$store.dispatch('editBook', {
+          _id: this.paramId,
+          title: this.editable.value,
+        });
+      }
+      this.editable.target = this.editable.value = null;
+      this.$store.dispatch('addNotification', {
+        title: 'Saved',
+      });
+    },
+    handleEditCancel() {
+      this.editable.target = this.editable.value = null;
     },
   },
   watch: {
@@ -117,44 +141,147 @@ export default {
         </button>
       </div>
       <div class="flex flex-col bg-white text-dark p-8 rounded-2xl gap-4">
-        <div class="flex flex-col">
-          <span class="uppercase text-xs leading-none">Book title</span>
-          <p class="text-lg">{{ book.title }}</p>
+        <div class="inline-flex items-start flex-col">
+          <span
+            class="uppercase text-xs leading-none inline-flex items-center gap-1"
+            >Book title
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"
+              />
+              <path
+                d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
+              />
+            </svg>
+          </span>
+          <p
+            v-if="editable.target !== 'title'"
+            @click="handleEdit('title', book.title)"
+            class="text-lg cursor-cell"
+          >
+            {{ book.title }}
+          </p>
+          <div v-else class="flex items-center gap-1">
+            <input
+              type="text"
+              v-model="editable.value"
+              class="text-lg flex-1 bg-transparent border-b-dark border-b outline-none"
+            />
+            <button
+              @click="handleEditSave"
+              class="text-dark rounded-full p-1 transition-colors hover:bg-green-500 hover:text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+            <button
+              @click="handleEditCancel"
+              class="text-dark rounded-full p-1 transition-colors hover:bg-red-500 hover:text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <div class="flex flex-col">
-            <span class="uppercase text-xs leading-none">Author</span>
+          <div class="inline-flex items-start flex-col">
+            <span
+              class="uppercase text-xs leading-none inline-flex items-center gap-1"
+              >Author<svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"
+                />
+                <path
+                  d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
+                /></svg
+            ></span>
             <p class="text-lg">{{ book.author }}</p>
           </div>
-          <div class="flex flex-col">
-            <span class="uppercase text-xs leading-none">Publication year</span>
+          <div class="inline-flex items-start flex-col">
+            <span
+              class="uppercase text-xs leading-none inline-flex items-center gap-1"
+              >Publication year<svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"
+                />
+                <path
+                  d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
+                /></svg
+            ></span>
             <p class="text-lg">-</p>
           </div>
-          <div class="flex flex-col">
-            <span class="uppercase text-xs leading-none">Pages count</span>
+          <div class="inline-flex items-start flex-col">
+            <span
+              class="uppercase text-xs leading-none inline-flex items-center gap-1"
+              >Pages count<svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"
+                />
+                <path
+                  d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
+                /></svg
+            ></span>
             <p class="text-lg">{{ book.pages }}</p>
           </div>
-          <div class="flex flex-col">
+          <div class="inline-flex items-start flex-col">
             <span class="uppercase text-xs leading-none">Addition date</span>
             <p class="text-lg">{{ formatDate(book.created) }}</p>
           </div>
-          <div class="flex flex-col">
+          <div class="inline-flex items-start flex-col">
             <span class="uppercase text-xs leading-none">Last update</span>
             <p class="text-lg">{{ formatDate(book.updated) }}</p>
           </div>
-          <div class="flex flex-col">
+          <div class="inline-flex items-start flex-col">
             <span class="uppercase text-xs leading-none">Progress</span>
             <p class="text-lg">{{ progress }}%</p>
           </div>
-          <div class="flex flex-col">
+          <div class="inline-flex items-start flex-col">
             <span class="uppercase text-xs leading-none">Pages read</span>
             <p class="text-lg">{{ read }}</p>
           </div>
-          <div class="flex flex-col">
+          <div class="inline-flex items-start flex-col">
             <span class="uppercase text-xs leading-none">Pages per day</span>
             <p class="text-lg">~ {{ pagesPerDay }}</p>
           </div>
-          <div class="flex flex-col">
+          <div class="inline-flex items-start flex-col">
             <span class="uppercase text-xs leading-none">Days left</span>
             <p class="text-lg">~ {{ daysLeft }}</p>
           </div>

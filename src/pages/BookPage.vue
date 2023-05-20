@@ -46,6 +46,7 @@ export default {
       this.$store.dispatch('addNotification', {
         title: 'Success',
         text: 'Mark was added',
+        type: 'success',
       });
       this.pagesCount = '';
     },
@@ -60,6 +61,7 @@ export default {
       this.$store.dispatch('addNotification', {
         title: 'Success',
         text: 'Book was successfully deleted',
+        type: 'success',
       });
       this.$router.push('/');
     },
@@ -78,7 +80,8 @@ export default {
 
       this.editable = null;
       this.$store.dispatch('addNotification', {
-        title: 'Saved',
+        text: 'Saved',
+        type: 'success',
       });
     },
     handleEditCancel() {

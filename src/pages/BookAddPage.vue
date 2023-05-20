@@ -18,12 +18,14 @@ export default {
         return this.$store.dispatch('addNotification', {
           title: 'Error!',
           text: 'Incorrect book title',
+          type: 'error',
         });
 
       if (!this.pages)
         return this.$store.dispatch('addNotification', {
           title: 'Error!',
           text: 'Incorrect pages count',
+          type: 'error',
         });
       this.$store.dispatch('addBook', {
         title: this.title,
@@ -34,6 +36,7 @@ export default {
       this.$store.dispatch('addNotification', {
         title: 'Success',
         text: 'Book was added to your list',
+        type: 'success',
       });
       this.$router.push('/');
     },

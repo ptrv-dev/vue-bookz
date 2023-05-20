@@ -198,7 +198,7 @@ export default {
               @click="editable = 'author'"
               class="text-lg cursor-cell"
             >
-              {{ book.author }}
+              {{ book.author || '-' }}
             </p>
             <app-editable
               v-else
